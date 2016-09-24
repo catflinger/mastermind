@@ -43,12 +43,21 @@
     <!-- Add your site or application content here -->
     <div class="container" ng-controller="mastermindController">
         <h1>Mastermind</h1>
-        <table>
+
+        <div ng-show="gameState == 'won'">You Won!</div>
+        <div ng-show="gameState == 'lost'">You Lost!</div>
+
+        <div ng-show="gameState != 'playing'">
+            <div class="peg" ng-repeat="peg in board.solutions" ng-style="{'background-color': peg.color}"></div>
+        </div>
+
+        <table class="table">
             <thead>
                 <tr>
                     <th colspan="4">Progress</th>
                     <th></th>
                     <th colspan="4">Guesses</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -58,8 +67,14 @@
                     </td>
                     <td><div class="separator"></div></td>
                     <td ng-repeat="peg in r.guessPegs">
-                        <div class="guess" ui-on-drop="onDrop(peg, $data)" ng-style="{'background-color': peg.color}"></div>
+                        <div class="guess" 
+                            ui-on-drop="onDrop(peg, $data)" 
+                            drop-validate="dropValidate(r)"
+                            ui-draggable="true"
+                            drag="peg.color" 
+                            ng-style="{'background-color': peg.color}"></div>
                     </td>
+                    <td><button class="btn btn-xs btn-default checkButton"" ng-show="r.active" ng-disabled="unusedPegCount(r) != 0" ng-click="check($index)">check</button></td>
                 </tr>
             </tbody>
         </table>
@@ -80,47 +95,6 @@
 
     <script src="draganddrop.js"></script>
 
-    <script>
-        var mastermindApp = angular.module("mastermindApp", ["ang-drag-drop"]);
-
-        mastermindApp.controller("mastermindController", ["$scope", function (scope) {
-            var i, j, row;
-
-            scope.board = {
-                numRows: 10,
-                numPegs: 4,
-                rows: [],
-                //solution: []
-            };
-
-            scope.pegColors = [
-                "red",
-                "green",
-                "white",
-                "blue",
-                "orange",
-                "purple"
-            ];
-
-            //fill the board with empty rows
-            for (i = 0; i < scope.board.numRows; i++) {
-                row = {
-                    guessPegs: [],
-                    indicators: []
-                };
-
-                for (j = 0; j < scope.board.numPegs; j++) {
-                    row.guessPegs.push({color: "grey"});
-                    row.indicators.push({ color: "grey"});
-                }
-
-                scope.board.rows.push(row);
-            }
-
-            scope.onDrop = function (peg, color) {
-                peg.color = color;
-            };
-        }]);
-    </script>
+    <script src="mastermind.js"></script>
 </body>
 </html>
