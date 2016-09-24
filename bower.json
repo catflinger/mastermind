@@ -1,0 +1,20 @@
+{
+  "name": "mastermind",
+  "homepage": "https://github.com/catflinger/mastermind",
+  "authors": [
+    "PeeeDeee <paul@drurys.org>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-native-dragdrop": "^1.2.2"
+  }
+}

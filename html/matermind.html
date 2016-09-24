@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" ng-app="mastermindApp">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Mastermind</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+ 
+    <!-- Include your CSS here -->
+    <style>
+        .indicator, .guess, .peg {
+            height: 20px;
+            width:20px;
+            margin: 5px;
+            padding: 0px;
+            border:1px solid black;
+        }
+
+        .separator {
+            height: 20px;
+            width: 20px;
+            margin: 5px;
+            padding: 1px;
+            border: 0px;
+        }
+
+        .peg {
+            float:left;
+        }
+
+    </style>
+</head>
+<body>
+    <!--[if lt IE 9]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a
+        href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div class="container" ng-controller="mastermindController">
+        <h1>Mastermind</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="4">Progress</th>
+                    <th></th>
+                    <th colspan="4">Guesses</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="r in board.rows">
+                    <td ng-repeat="peg in r.indicators">
+                        <div class="indicator" ng-style="{'background-color': peg.color}"></div>
+                    </td>
+                    <td><div class="separator"></div></td>
+                    <td ng-repeat="peg in r.guessPegs">
+                        <div class="guess" ui-on-drop="onDrop(peg, $data)" ng-style="{'background-color': peg.color}"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <div class="peg" ui-draggable="true" drag="c" ng-repeat="c in pegColors track by $index" ng-style="{'background-color': c}"></div>
+        </div>
+
+    </div>
+ 
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+    <!-- Include your JavaScript files here -->
+
+    <script src="draganddrop.js"></script>
+
+    <script>
+        var mastermindApp = angular.module("mastermindApp", ["ang-drag-drop"]);
+
+        mastermindApp.controller("mastermindController", ["$scope", function (scope) {
+            var i, j, row;
+
+            scope.board = {
+                numRows: 10,
+                numPegs: 4,
+                rows: [],
+                //solution: []
+            };
+
+            scope.pegColors = [
+                "red",
+                "green",
+                "white",
+                "blue",
+                "orange",
+                "purple"
+            ];
+
+            //fill the board with empty rows
+            for (i = 0; i < scope.board.numRows; i++) {
+                row = {
+                    guessPegs: [],
+                    indicators: []
+                };
+
+                for (j = 0; j < scope.board.numPegs; j++) {
+                    row.guessPegs.push({color: "grey"});
+                    row.indicators.push({ color: "grey"});
+                }
+
+                scope.board.rows.push(row);
+            }
+
+            scope.onDrop = function (peg, color) {
+                peg.color = color;
+            };
+        }]);
+    </script>
+</body>
+</html>
